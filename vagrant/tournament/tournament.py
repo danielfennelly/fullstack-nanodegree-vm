@@ -12,30 +12,36 @@ def read_sql(filename):
 
 STANDINGS_SQL = read_sql("standings.sql")
 
-def connect():
+def connect(database_name="tournament"):
     """Connect to the PostgreSQL database.  Returns a database connection."""
-    return psycopg2.connect("dbname=tournament")
-
-DB = connect()
+    try:
+        db = psycopg2.connect("dbname={}".format(database_name))
+        cursor = db.cursor()
+        return db, cursor
+    except psycopg2.Error as exception:
+        print(exception)
 
 def deleteMatches():
     """Remove all the match records from the database."""
-    cur = DB.cursor()
+    db, cur = connect()
     cur.execute("DELETE FROM matches")
-    DB.commit()
+    db.commit()
+    db.close()
 
 def deletePlayers():
     """Remove all the player records from the database."""
-    cur = DB.cursor()
+    db, cur = connect()
     cur.execute("DELETE FROM players")
-    DB.commit()
+    db.commit()
+    db.close()
 
 def countPlayers():
     """Returns the number of players currently registered."""
-    cur = DB.cursor()
+    db, cur = connect()
     cur.execute("SELECT count(*) FROM players")
     results = cur.fetchall()
-    DB.commit()
+    db.commit()
+    db.close()
     return results[0][0]
 
 def registerPlayer(name):
@@ -47,9 +53,10 @@ def registerPlayer(name):
     Args:
       name: the player's full name (need not be unique).
     """
-    cur = DB.cursor()
+    db, cur = connect()
     cur.execute("INSERT INTO players (name) VALUES (%s)", (name,))
-    DB.commit()
+    db.commit()
+    db.close()
 
 def playerStandings():
     """Returns a list of the players and their win records, sorted by wins.
@@ -64,10 +71,11 @@ def playerStandings():
         wins: the number of matches the player has won
         matches: the number of matches the player has played
     """
-    cur = DB.cursor()
+    db, cur = connect()
     cur.execute(STANDINGS_SQL)
     results = cur.fetchall()
     return [(row[0], row[1], row[2], row[3])for row in results]
+    db.close()
 
 def reportMatch(winner, loser):
     """Records the outcome of a single match between two players.
@@ -76,9 +84,10 @@ def reportMatch(winner, loser):
       winner:  the id number of the player who won
       loser:  the id number of the player who lost
     """
-    cur = DB.cursor()
+    db, cur = connect()
     cur.execute("INSERT INTO matches (winner, loser) VALUES (%s, %s)", (winner, loser,))
-    DB.commit()
+    db.commit()
+    db.close()
  
 def swissPairings():
     """Returns a list of pairs of players for the next round of a match.
