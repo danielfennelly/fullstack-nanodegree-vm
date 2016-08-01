@@ -5,13 +5,6 @@
 
 import psycopg2
 
-def read_sql(filename):
-    with open(filename) as f:
-        sql = f.read()
-        return sql
-
-STANDINGS_SQL = read_sql("standings.sql")
-
 def connect(database_name="tournament"):
     """Connect to the PostgreSQL database.  Returns a database connection."""
     try:
@@ -39,10 +32,10 @@ def countPlayers():
     """Returns the number of players currently registered."""
     db, cur = connect()
     cur.execute("SELECT count(*) FROM players")
-    results = cur.fetchall()
+    results = cur.fetchone()
     db.commit()
     db.close()
-    return results[0][0]
+    return results[0]
 
 def registerPlayer(name):
     """Adds a player to the tournament database.
@@ -72,7 +65,8 @@ def playerStandings():
         matches: the number of matches the player has played
     """
     db, cur = connect()
-    cur.execute(STANDINGS_SQL)
+    query = "SELECT * FROM standings"
+    cur.execute(query)
     results = cur.fetchall()
     return [(row[0], row[1], row[2], row[3])for row in results]
     db.close()
