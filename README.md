@@ -23,7 +23,7 @@ Project: Item Catalog
 
 Code for this project can be found in `vagrant/catalog`.
 
-This directory houses a Flask application. Test the app locally with the following commands. It's necessary to set the host to `0.0.0.0` if the app is to be run in a virtual machine, or else requests from the host machine will be unable to reach the app.
+This directory houses a [Flask](http://flask.pocoo.org/) application. Test the app locally with the following commands. It's necessary to set the host to `0.0.0.0` if the app is to be run in a virtual machine, or else requests from the host machine will be unable to reach the app.
 
 ```
 export FLASK_APP=app.py
