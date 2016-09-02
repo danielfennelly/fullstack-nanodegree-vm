@@ -1,6 +1,7 @@
-from flask import Flask, flash, redirect, render_template, request, url_for
+from flask import Flask, flash, jsonify, redirect, render_template, \
+    request, url_for
 from flask import session as login_session
-from utils import json_response, token, login_required
+from utils import json_response, token, login_required, request_wants_json
 
 import json
 
@@ -106,6 +107,13 @@ def index():
     user = getUser()
     categories = getCategories()
     items = getItems()
+
+    if request_wants_json():
+        index_data = {
+            'categories': [category.serialize for category in categories],
+            'recent_items': [item.serialize for item in items]}
+        return jsonify(index_data)
+
     return render_template('index.html', categories=categories, items=items,
                            user=user)
 
@@ -207,6 +215,11 @@ def category(category_name):
 
     if category:
         items = getItemsByCategory(category_name)
+
+        if request_wants_json():
+            category_dict = category.serialize
+            category_dict['items'] = [item.serialize for item in items]
+            return jsonify(category_dict)
         return render_template('index.html', category=category,
                                items=items, categories=categories, user=user)
     else:
@@ -296,6 +309,8 @@ def item(category_name, item_name):
     category = getCategory(category_name)
     item = findItem(item_name, category_items)
     if item:
+        if request_wants_json():
+            return jsonify(item.serialize)
         return render_template('item.html', item=item, items=category_items,
                                category=category, user=user)
     else:
