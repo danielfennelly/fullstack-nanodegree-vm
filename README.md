@@ -30,3 +30,7 @@ export FLASK_APP=app.py
 export FLASK_DEBUG=1
 flask run --host=0.0.0.0
 ```
+
+Before running, the local database should be created by running `python database_setup.py`. The `populate_database.py` script will create some basic records in the database to give the application some minimal content.
+
+This application relies upon [Google Sign-in for Websites](https://developers.google.com/identity/sign-in/web/) to handle its authentication. To properly run, a `client_secrets.json` file will be necessary, and should be placed in the root directory of the application. Detailed instructions for acquiring such a file can be found in the Google Sign-In documentation.
