@@ -1,4 +1,36 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>Hello World!</h1>
+<div class="category-nav pure-u-1 pure-u-sm-1-4">
+	<h2>Categories <a href="/new_category">+</a></h2>
+	{% if categories %}
+		<ul style="list-style-type:none">
+		  {% for category in categories %}
+		    <li><a href="/category/{{category.name}}">{{category.name}}</a></li>
+		  {% endfor %}
+		</ul>
+	{% endif %}
+</div>
+<div class="category-contents pure-u-1 pure-u-sm-3-4">
+	<div class="category-title">
+		{% if category %}
+			<h2>{{category.name}} <a href="/category/{{category.name}}/new_item">+</a></h2>
+			<a href="/category/{{category.name}}/edit">Edit Category</a>|<a href="/category/{{category.name}}/delete">Delete Category</a>
+			<p>{{category.description}}</p>
+		{% else %}
+			<h2>Latest Items</h2>
+		{% endif %}
+	</div>
+	<div class="category-items">
+	{% if items %}
+		<ul>
+			{% for item in items %}
+				<li>
+					<a href="/category/{{item.category.name}}/item/{{item.name}}">{{item.name}}</a>
+					{% if not category %}<span class="light">({{item.category.name}})</span>{% endif %}
+				</li>
+			{% endfor %}
+		</ul>
+	{% endif %}
+	</div>
+</div>
 {% endblock content %}

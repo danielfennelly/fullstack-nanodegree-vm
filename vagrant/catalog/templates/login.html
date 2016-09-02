@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="pure-u-1">
+
+	<button id="signinButton" class="pure-button pure-button-primary">Sign in with Google</button>
+	<script>
+	  $('#signinButton').click(function() {
+	  // signInCallback defined in step 6.
+	    auth2.grantOfflineAccess({'redirect_uri': 'postmessage'}).then(signInCallback)
+	  });
+	</script>
+</div>
+{% endblock content %}
+
+{% block endbody %}
+<script>
+	function signInCallback(authResult) {
+	  if (authResult['code']) {
+
+	    // Hide the sign-in button now that the user is authorized, for example:
+	    $('#signinButton').attr('style', 'display: none');
+
+	    // Send the code to the server
+	    $.ajax({
+	      type: 'POST',
+	      url: 'http://localhost:5000/gconnect?state={{STATE}}',
+	      contentType: 'application/octet-stream; charset=utf-8',
+	      success: function(result) {
+					window.location.href = '';
+				},
+	      processData: false,
+	      data: authResult['code']
+	    });
+	  } else {
+	    // There was an error.
+	  }
+	}
+</script>
+{% endblock endbody %}

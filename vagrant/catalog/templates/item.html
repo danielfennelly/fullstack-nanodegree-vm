@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="category-nav pure-u-1 pure-u-sm-1-4">
+	<h2>{{category.name}}</h2>
+	{% if items %}
+		<ul style="list-style-type:none">
+		  {% for i in items %}
+		  	{% if i.name == item.name %}
+		    <li>{{i.name}}</li>
+		  	{% else %}
+		    <li><a href="/category/{{category.name}}/item/{{i.name}}">{{i.name}}</a></li>
+		  	{% endif %}
+		  {% endfor %}
+		</ul>
+	{% endif %}
+</div>
+<div class="pure-u-1 pure-u-sm-3-4">
+	<h2>{{item.name}}</h2>
+	<a href="/category/{{category.name}}/item/{{item.name}}/edit">Edit Item</a>|<a href="/category/{{category.name}}/item/{{item.name}}/delete">Delete Item</a>
+	<p>{{item.description}}</p>
+</div>
+{% endblock content %}

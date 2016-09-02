@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="pure-u-1">
+<h2>Really delete {{entity.name}}?</h2>
+<form method="post" action="{{path}}">
+	<button class="pure-button pure-button-primary">Delete</button>
+	<a class="pure-button" href="/">Cancel</a>
+</form>
+</div>
+{% endblock content %}

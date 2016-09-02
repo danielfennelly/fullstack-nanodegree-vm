@@ -1,7 +1,8 @@
 import json
 import random
 import string
-from flask import make_response
+from flask import make_response, session, request, redirect, url_for
+from functools import wraps
 
 
 def token(n=32):
@@ -13,3 +14,13 @@ def json_response(message, status_code=200):
     response = make_response(json.dumps(message), status_code)
     response.headers['Content-Type'] = 'application/json'
     return response
+
+
+# From the Flask docs
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if session.get('google_id') is None:
+            return redirect(url_for('login', next=request.url))
+        return f(*args, **kwargs)
+    return decorated_function

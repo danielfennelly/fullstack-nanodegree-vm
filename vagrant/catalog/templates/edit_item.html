@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="pure-u-1">
+	{% if item %}
+	<h3>Edit Item</h3>
+	<form method="post" action="/category/{{category.name}}/item/{{item.name}}/edit" class="pure-form pure-form-aligned">
+	{% else %}
+	<h3>New Item</h3>
+	<form method="post" action="/category/{{category.name}}/new_item" class="pure-form pure-form-aligned">
+	{% endif %}
+		<fieldset>
+		<div class="pure-control-group">
+				<label for="item-name">Item Name</label>
+				{% if item %}
+				<input
+					class="name-input pure-input-2-3"
+					name="item-name"
+					id="item-name"
+					placeholder="Item Name"
+					value="{{item.name}}"></input>
+				{% else %}
+					<input
+					class="name-input pure-input-2-3"
+					name="item-name"
+					id="item-name"
+					placeholder="Item Name"
+					value=""></input>
+				{% endif %}
+		</div>
+		<div class="pure-control-group">
+				<label for="item-description">Item Description</label>
+				<textarea
+					class="description-input pure-input-2-3"
+					name="item-description"
+					id="item-description"
+					placeholder="Item Description">{% if item %}{{item.description}}{% endif %}</textarea>
+		</div>
+		<div class="pure-control-group">
+			<label for="category">Category</label>
+			<select name="category" id="category">
+			{% for c in categories %}
+				{% if c.name == category.name %}
+					<option value="{{c.name}}" selected>{{c.name}}</option>
+				{% else %}
+					<option value="{{c.name}}">{{c.name}}</option>
+				{% endif %}
+			{% endfor %}
+			</select>
+		</div>
+		<div class="pure-controls">
+			<button class="pure-button pure-button-primary">Submit</button>
+			<a class="pure-button" href="/">Cancel</a>
+		</div>
+		</fieldset>
+	</form>
+</div>
+{% endblock content %}

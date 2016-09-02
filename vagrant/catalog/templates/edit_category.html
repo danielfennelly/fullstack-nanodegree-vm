@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="pure-u-1">
+	{% if category %}
+		<h3>Edit Category</h3>
+		<form method="post" action="/category/{{category.name}}/edit" class="pure-form pure-form-aligned">
+	{% else %}
+		<h3>New Category</h3>
+		<form method="post" action="/new_category" class="pure-form pure-form-aligned">
+	{% endif %}
+		<fieldset>
+			<div class="pure-control-group">
+				<label for="category-name">Category Name</label>
+				{% if category %}
+					<input class="name-input" name="category-name" id="category-name" placeholder="Category Name" value="{{category.name}}"></input>
+				{% else %}
+					<input class="name-input" name="category-name" id="category-name" placeholder="Category Name"></input>
+				{% endif %}
+			</div>
+			<div class="pure-control-group">
+				<label for="category-description">Category Description</label>
+				<textarea
+					class="description-input pure-input-2-3"
+					name="category-description"
+					id="category-description"
+					placeholder="Category Description">{% if category %}{{category.description}}{% endif %}</textarea>
+			</div>
+			<div class="pure-controls">
+				<button class="pure-button pure-button-primary">Submit</button>
+				<a class="pure-button" href="/">Cancel</a>
+			</div>
+		</fieldset>
+	</form>
+</div>
+{% endblock content %}

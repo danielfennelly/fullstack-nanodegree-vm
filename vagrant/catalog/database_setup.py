@@ -11,6 +11,7 @@ class User(Base):
     __tablename__ = 'user'
 
     id = Column(Integer, primary_key=True)
+    google_id = Column(Integer, nullable=True)
     name = Column(String(250), nullable=False)
     email = Column(String(250), nullable=True)
     picture_url = Column(String(250), nullable=True)
@@ -18,10 +19,11 @@ class User(Base):
     @property
     def serialize(self):
         return {
-          'name': self.name,
-          'id': self.id,
-          'email': self.email,
-          'picture_url': self.picture_url
+            'name': self.name,
+            'id': self.id,
+            'google_id': self.google_id,
+            'email': self.email,
+            'picture_url': self.picture_url
         }
 
 
